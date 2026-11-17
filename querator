@@ -1,0 +1,37 @@
+#!/usr/bin/python
+
+import os
+from os.path import isdir
+import sys
+
+
+
+
+argv = sys.argv
+argc = len(argv)
+cwd = os.getcwd()
+
+print(argv, argc, cwd)
+
+recurse: bool = False;
+
+valid_ext = ["mp4", "mkv", "avi", "mov", "wmv", "flv", "webm", "mpeg", "mpg", "m4v", "3gp", "3g2", "ts", "mts", "m2ts", "vob", "ogv", "divx", "asf", "mxf", "f4v", "rm", "rmvb", "yuv", "m2v", "mpv", "mpe", "mp2", "m2p", "m2t", "roq", "nsv", "amv", "mkv"]
+
+validated: list[str] = []
+
+def validate(files) -> None:
+    for file in files:
+        name_ext = file.name.split('.')
+        if name_ext[-1] in valid_ext:
+            validated.append(file)
+files = []
+
+with os.scandir(cwd) as entries:
+    for entry in entries:
+        if entry.is_file():
+            files.append(entry)
+        if recurse and entry.is_dir():
+            pass
+
+validate(files)
+print(validated)
